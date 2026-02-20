@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Event Dashboard</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to right, #4facfe, #00c6ff);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .main-container {
+            display: flex;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 50%;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        input, select, textarea {
+            width: 100%;
+            margin: 8px 0;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            padding: 8px;
+            margin-top: 8px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: #00aaff;
+            color: white;
+        }
+
+        button:hover {
+            background-color: #007acc;
+        }
+
+        .event-card {
+            background: #f0f8ff;
+            padding: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #00aaff;
+            border-radius: 5px;
+        }
+
+        .delete-btn {
+            background: red;
+            margin-top: 5px;
+        }
+
+        .bottom-section {
+            margin-top: 30px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🎯 Smart Event Dashboard</h1>
+
+<div class="main-container">
+
+    <!-- Left Form -->
+    <div class="card">
+        <h3>Add New Event</h3>
+
+        <label>Event Title:</label>
+        <input type="text" id="title">
+
+        <label>Event Date:</label>
+        <input type="date" id="date">
+
+        <label>Category:</label>
+        <select id="category">
+            <option>Conference</option>
+            <option>Workshop</option>
+            <option>Meetup</option>
+        </select>
+
+        <label>Description:</label>
+        <textarea id="description"></textarea>
+
+        <button id="addBtn">Add Event</button>
+    </div>
+
+    <!-- Right Events -->
+    <div class="card">
+        <h3>My Events</h3>
+
+        <button id="clearBtn">Clear All Events</button>
+        <button id="sampleBtn">Add Sample Events</button>
+
+        <div id="eventList">
+            <p id="emptyMsg">No events yet. Add your first event!</p>
+        </div>
+    </div>
+
+</div>
+
+<!-- Bottom DOM Demo -->
+<div class="bottom-section">
+    <h3>DOM Manipulation Demo</h3>
+    <p id="keyText">Press any key...</p>
+</div>
+
+<script>
+
+    // Selecting Elements
+    var addBtn = document.getElementById("addBtn");
+    var clearBtn = document.getElementById("clearBtn");
+    var sampleBtn = document.getElementById("sampleBtn");
+    var eventList = document.getElementById("eventList");
+    var emptyMsg = document.getElementById("emptyMsg");
+
+    var title = document.getElementById("title");
+    var date = document.getElementById("date");
+    var category = document.getElementById("category");
+    var description = document.getElementById("description");
+
+    // Add Event
+    addBtn.addEventListener("click", function() {
+
+        if(title.value == "" || date.value == "") {
+            alert("Please fill title and date");
+            return;
+        }
+
+        emptyMsg.style.display = "none";
+
+        var newEvent = document.createElement("div");
+        newEvent.className = "event-card";
+
+        newEvent.innerHTML =
+            "<h4>" + title.value + "</h4>" +
+            "<p>Date: " + date.value + "</p>" +
+            "<p>Category: " + category.value + "</p>" +
+            "<p>" + description.value + "</p>" +
+            "<button class='delete-btn'>Delete</button>";
+
+        eventList.appendChild(newEvent);
+
+        title.value = "";
+        date.value = "";
+        description.value = "";
+    });
+
+    // Event Delegation for Delete
+    eventList.addEventListener("click", function(e) {
+        if(e.target.className == "delete-btn") {
+            e.target.parentNode.remove();
+        }
+
+        if(eventList.children.length == 1) {
+            emptyMsg.style.display = "block";
+        }
+    });
+
+    // Clear All
+    clearBtn.addEventListener("click", function() {
+        eventList.innerHTML = "";
+        eventList.appendChild(emptyMsg);
+        emptyMsg.style.display = "block";
+    });
+
+    // Add Sample Events
+    sampleBtn.addEventListener("click", function() {
+
+        emptyMsg.style.display = "none";
+
+        var sample = document.createElement("div");
+        sample.className = "event-card";
+        sample.innerHTML =
+            "<h4>Sample Workshop</h4>" +
+            "<p>Date: 2026-02-15</p>" +
+            "<p>Category: Workshop</p>" +
+            "<p>This is a sample event.</p>" +
+            "<button class='delete-btn'>Delete</button>";
+
+        eventList.appendChild(sample);
+    });
+
+    // Key Press Demo
+    document.addEventListener("keydown", function(e) {
+        var keyText = document.getElementById("keyText");
+        keyText.textContent = "You Pressed: " + e.key;
+        keyText.style.color = "blue";
+        keyText.style.fontWeight = "bold";
+    });
+
+</script>
+
+</body>
+</html>
